@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Senin İçin 💖</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
         body {
             margin: 0;
-            background: #0d0d0d;
+            background: #0a0a0a;
             color: white;
             font-family: "Poppins", sans-serif;
             text-align: center;
+            overflow-x: hidden;
         }
 
         header {
@@ -19,33 +23,42 @@
         }
 
         h1 {
-            font-size: 48px;
             color: #ff4d6d;
+            font-size: 50px;
             margin-bottom: 10px;
+            animation: fadeIn 2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
         }
 
         p {
+            color: #bbbbbb;
             font-size: 20px;
-            color: #cccccc;
+            max-width: 700px;
+            margin: auto;
         }
 
+        /* BENİ SEVİYOR MUSUN */
         .question-box {
-            margin-top: 40px;
+            margin-top: 50px;
         }
 
         #yes, #no {
-            padding: 15px 35px;
-            border-radius: 10px;
+            padding: 15px 40px;
+            font-size: 22px;
             border: none;
-            font-size: 20px;
+            border-radius: 10px;
             cursor: pointer;
+            margin: 15px;
             transition: 0.3s;
         }
 
         #yes {
             background: #ff4d6d;
             color: white;
-            margin-right: 20px;
         }
 
         #yes:hover {
@@ -55,93 +68,83 @@
         #no {
             background: #333;
             color: white;
-            position: relative;
+            position: absolute;
         }
 
-        /* ANILAR BÖLÜMÜ */
-        .memory-section {
-            margin-top: 80px;
-            padding: 40px 20px;
-        }
-
-        .memory-title {
-            font-size: 36px;
-            margin-bottom: 20px;
+        #answer {
+            font-size: 26px;
+            margin-top: 20px;
             color: #ff4d6d;
         }
 
-        .memory-gallery {
+        /* SLIDER */
+        .slider {
+            margin-top: 70px;
+            width: 90%;
+            max-width: 900px;
+            height: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0px 0px 25px rgba(255, 77, 109, 0.4);
+        }
+
+        .slides {
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 25px;
+            width: 300%;
+            animation: slide 12s infinite;
         }
 
-        .memory-item {
-            background: #1a1a1a;
-            width: 280px;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 0px 20px rgba(255, 77, 109, 0.2);
-        }
-
-        .memory-item img {
+        .slides img {
             width: 100%;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        @keyframes slide {
+            0% {transform: translateX(0%);}
+            33% {transform: translateX(-100%);}
+            66% {transform: translateX(-200%);}
+            100% {transform: translateX(0%);}
         }
 
         footer {
-            margin-top: 60px;
-            padding: 20px;
+            margin-top: 80px;
+            padding: 30px;
             color: #777;
         }
     </style>
 </head>
-
 <body>
+
+    <!-- ARKA PLAN MÜZİĞİ -->
+    <audio autoplay loop>
+        <source src="muzik.mp3" type="audio/mp3">
+    </audio>
+
     <header>
-        <h1>💖 Sürpriz! 💖</h1>
-        <p>Senin için özel bir site hazırladım. Hazır mısın?</p>
+        <h1>💖 Sürprizz 💖</h1>
+        <p>Senin için hayatımda yaptığım en tatlı şeyi hazırladım...</p>
 
         <div class="question-box">
             <h2>Beni seviyor musun? 🥺</h2>
-
             <button id="yes">Evet 💘</button>
             <button id="no">Hayır 😒</button>
-
-            <p id="answer" style="margin-top:20px; font-size:22px; color:#ff4d6d;"></p>
+            <p id="answer"></p>
         </div>
     </header>
 
-    <section class="memory-section">
-        <h2 class="memory-title">📸 Anılarımız</h2>
-
-        <div class="memory-gallery">
-
-            <!-- BURAYA FOTOĞRAFLAR GELECEK -->
-            <!-- Sadece fotoğraf adını değiştirmen yeterli -->
-
-            <div class="memory-item">
-                <img src="resim1.jpg" alt="Anı 1">
-                <p>Buraya bir yazı yaz!</p>
-            </div>
-
-            <div class="memory-item">
-                <img src="resim2.jpg" alt="Anı 2">
-                <p>Bunu sen yazacaksın ♥</p>
-            </div>
-
-            <div class="memory-item">
-                <img src="resim3.jpg" alt="Anı 3">
-                <p>Son fotoğraf buraya.</p>
-            </div>
-
+    <!-- FOTOĞRAF SLIDER -->
+    <div class="slider">
+        <div class="slides">
+            <img src="resim1.jpg" alt="Anı 1">
+            <img src="resim2.jpg" alt="Anı 2">
+            <img src="resim3.jpg" alt="Anı 3">
         </div>
-    </section>
+    </div>
 
     <footer>
-        Bu site senin için, tüm kalbimle ❤️
+        Bu siteyi senin için yaptım... ❤️
     </footer>
 
     <script>
@@ -149,19 +152,19 @@
         const yesBtn = document.getElementById("yes");
         const answer = document.getElementById("answer");
 
-        // "Hayır" butonu kaçıyor
+        // Hayır tuşu kaçıyor
         noBtn.onmouseover = function () {
-            let x = Math.random() * (window.innerWidth - 100);
-            let y = Math.random() * (window.innerHeight - 100);
-            noBtn.style.position = "absolute";
+            let x = Math.random() * (window.innerWidth - 150);
+            let y = Math.random() * (window.innerHeight - 150);
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
         };
 
-        // "Evet"e tıklayınca mesaj
+        // Evet tıklandığında mesaj
         yesBtn.onclick = function () {
-            answer.innerHTML = "Ben de seni çok seviyorum ❤️";
+            answer.innerHTML = "Ben de seni çoook seviyorum ❤️";
         };
     </script>
+
 </body>
 </html>
