@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sürpriz Site</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Senin İçin 💖</title>
 
     <style>
         body {
             margin: 0;
+            background: #0d0d0d;
+            color: white;
             font-family: "Poppins", sans-serif;
-            background-color: #0d0d0d;
-            color: #ffffff;
             text-align: center;
         }
 
         header {
-            padding: 50px 20px;
+            padding: 60px 20px;
         }
 
         h1 {
@@ -27,45 +27,141 @@
         p {
             font-size: 20px;
             color: #cccccc;
-            max-width: 700px;
-            margin: 20px auto;
         }
 
-        img {
-            margin-top: 20px;
-            border-radius: 12px;
-            width: 70%;
-            max-width: 400px;
-            box-shadow: 0px 0px 20px rgba(255, 77, 109, 0.4);
-        }
-
-        .box {
+        .question-box {
             margin-top: 40px;
+        }
+
+        #yes, #no {
+            padding: 15px 35px;
+            border-radius: 10px;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #yes {
+            background: #ff4d6d;
+            color: white;
+            margin-right: 20px;
+        }
+
+        #yes:hover {
+            transform: scale(1.1);
+        }
+
+        #no {
+            background: #333;
+            color: white;
+            position: relative;
+        }
+
+        /* ANILAR BÖLÜMÜ */
+        .memory-section {
+            margin-top: 80px;
+            padding: 40px 20px;
+        }
+
+        .memory-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #ff4d6d;
+        }
+
+        .memory-gallery {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .memory-item {
+            background: #1a1a1a;
+            width: 280px;
             padding: 20px;
-            background-color: #1a1a1a;
             border-radius: 12px;
-            display: inline-block;
-            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.05);
+            box-shadow: 0px 0px 20px rgba(255, 77, 109, 0.2);
+        }
+
+        .memory-item img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 20px;
+            color: #777;
         }
     </style>
 </head>
 
 <body>
-
     <header>
-        <h1>✨ Sürpriz! ✨</h1>
-        <p>Senin için küçük bir şey hazırladım. Umarım beğenirsin 💖</p>
+        <h1>💖 Sürpriz! 💖</h1>
+        <p>Senin için özel bir site hazırladım. Hazır mısın?</p>
 
-        <!-- Fotoğraf -->
-        <img src="resim1.jpg" alt="Fotoğraf">
+        <div class="question-box">
+            <h2>Beni seviyor musun? 🥺</h2>
+
+            <button id="yes">Evet 💘</button>
+            <button id="no">Hayır 😒</button>
+
+            <p id="answer" style="margin-top:20px; font-size:22px; color:#ff4d6d;"></p>
+        </div>
     </header>
 
-    <div class="box">
-        <p>
-            Buraya istediğin romantik yazıyı ekleyebilirim.  
-            Bana ne yazmak istediğini söylersen siteye özel bir tasarım yapayım. 🌙
-        </p>
-    </div>
+    <section class="memory-section">
+        <h2 class="memory-title">📸 Anılarımız</h2>
 
+        <div class="memory-gallery">
+
+            <!-- BURAYA FOTOĞRAFLAR GELECEK -->
+            <!-- Sadece fotoğraf adını değiştirmen yeterli -->
+
+            <div class="memory-item">
+                <img src="resim1.jpg" alt="Anı 1">
+                <p>Buraya bir yazı yaz!</p>
+            </div>
+
+            <div class="memory-item">
+                <img src="resim2.jpg" alt="Anı 2">
+                <p>Bunu sen yazacaksın ♥</p>
+            </div>
+
+            <div class="memory-item">
+                <img src="resim3.jpg" alt="Anı 3">
+                <p>Son fotoğraf buraya.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        Bu site senin için, tüm kalbimle ❤️
+    </footer>
+
+    <script>
+        const noBtn = document.getElementById("no");
+        const yesBtn = document.getElementById("yes");
+        const answer = document.getElementById("answer");
+
+        // "Hayır" butonu kaçıyor
+        noBtn.onmouseover = function () {
+            let x = Math.random() * (window.innerWidth - 100);
+            let y = Math.random() * (window.innerHeight - 100);
+            noBtn.style.position = "absolute";
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+        };
+
+        // "Evet"e tıklayınca mesaj
+        yesBtn.onclick = function () {
+            answer.innerHTML = "Ben de seni çok seviyorum ❤️";
+        };
+    </script>
 </body>
 </html>
