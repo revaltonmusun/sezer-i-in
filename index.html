@@ -3,168 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senin İçin 💖</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            margin: 0;
-            background: #0a0a0a;
-            color: white;
-            font-family: "Poppins", sans-serif;
-            text-align: center;
-            overflow-x: hidden;
-        }
-
-        header {
-            padding: 60px 20px;
-        }
-
-        h1 {
-            color: #ff4d6d;
-            font-size: 50px;
-            margin-bottom: 10px;
-            animation: fadeIn 2s ease;
-        }
-
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-
-        p {
-            color: #bbbbbb;
-            font-size: 20px;
-            max-width: 700px;
-            margin: auto;
-        }
-
-        /* BENİ SEVİYOR MUSUN */
-        .question-box {
-            margin-top: 50px;
-        }
-
-        #yes, #no {
-            padding: 15px 40px;
-            font-size: 22px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin: 15px;
-            transition: 0.3s;
-        }
-
-        #yes {
-            background: #ff4d6d;
-            color: white;
-        }
-
-        #yes:hover {
-            transform: scale(1.1);
-        }
-
-        #no {
-            background: #333;
-            color: white;
-            position: absolute;
-        }
-
-        #answer {
-            font-size: 26px;
-            margin-top: 20px;
-            color: #ff4d6d;
-        }
-
-        /* SLIDER */
-        .slider {
-            margin-top: 70px;
-            width: 90%;
-            max-width: 900px;
-            height: 450px;
-            margin-left: auto;
-            margin-right: auto;
-            overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0px 0px 25px rgba(255, 77, 109, 0.4);
-        }
-
-        .slides {
-            display: flex;
-            width: 300%;
-            animation: slide 12s infinite;
-        }
-
-        .slides img {
-            width: 100%;
-            object-fit: cover;
-        }
-
-        @keyframes slide {
-            0% {transform: translateX(0%);}
-            33% {transform: translateX(-100%);}
-            66% {transform: translateX(-200%);}
-            100% {transform: translateX(0%);}
-        }
-
-        footer {
-            margin-top: 80px;
-            padding: 30px;
-            color: #777;
-        }
-    </style>
+    <title>Sevgililer Günü</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ARKA PLAN MÜZİĞİ -->
-    <audio autoplay loop>
-        <source src="muzik.mp3" type="audio/mp3">
-    </audio>
+<div class="container fade-in">
+    <h1>❤️ Sevgilim, 14 Şubat Kutlu Olsun ❤️</h1>
+    <p class="message">
+        Seninle geçen her gün, hayatımın en güzel hediyesi.  
+        Bu küçük siteyi sana özel hazırladım…  
+        İyi ki varsın, iyi ki benimlesin. ❤️
+    </p>
 
-    <header>
-        <h1>💖 Sürprizz 💖</h1>
-        <p>Senin için hayatımda yaptığım en tatlı şeyi hazırladım...</p>
+    <img src="images/biz.jpg" class="photo" alt="Fotoğrafımız">
 
-        <div class="question-box">
-            <h2>Beni seviyor musun? 🥺</h2>
-            <button id="yes">Evet 💘</button>
-            <button id="no">Hayır 😒</button>
-            <p id="answer"></p>
-        </div>
-    </header>
+    <button class="btn" onclick="showSurprise()">Sürprizi Gör ✨</button>
 
-    <!-- FOTOĞRAF SLIDER -->
-    <div class="slider">
-        <div class="slides">
-            <img src="resim1.jpg" alt="Anı 1">
-            <img src="resim2.jpg" alt="Anı 2">
-            <img src="resim3.jpg" alt="Anı 3">
-        </div>
+    <div id="surprise" class="hidden">
+        <h2>💌 Sana Bir Mesajım Var 💌</h2>
+        <p class="letter">
+            Seni dünyadaki her şeyden çok seviyorum.  
+            Gülüşün, sesin, kokun, varlığın…  
+            Hepsi benim için bir mucize.  
+            Seninle her anım daha güzel, daha anlamlı.  
+            Sonsuza kadar birlikte olmaya… ❤️
+        </p>
     </div>
+</div>
 
-    <footer>
-        Bu siteyi senin için yaptım... ❤️
-    </footer>
+<audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e0a7e433f.mp3?filename=romantic-110397.mp3" loop></audio>
 
-    <script>
-        const noBtn = document.getElementById("no");
-        const yesBtn = document.getElementById("yes");
-        const answer = document.getElementById("answer");
-
-        // Hayır tuşu kaçıyor
-        noBtn.onmouseover = function () {
-            let x = Math.random() * (window.innerWidth - 150);
-            let y = Math.random() * (window.innerHeight - 150);
-            noBtn.style.left = x + "px";
-            noBtn.style.top = y + "px";
-        };
-
-        // Evet tıklandığında mesaj
-        yesBtn.onclick = function () {
-            answer.innerHTML = "Ben de seni çoook seviyorum ❤️";
-        };
-    </script>
-
+<script src="script.js"></script>
 </body>
 </html>
