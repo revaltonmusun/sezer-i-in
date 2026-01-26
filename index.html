@@ -75,12 +75,20 @@
             transition: 0.3s;
         }
 
-        button:hover {
-            background: #b52a59;
+        button:hover { background: #b52a59; }
+
+        #playMusic {
+            background: #ff4d79;
+            margin-top: 15px;
+        }
+
+        #playMusic:hover {
+            background: #e63b6b;
         }
     </style>
 </head>
 <body>
+
     <header>
         <h1>14 Şubat Kutlu Olsun Aşkım ❤️</h1>
         <p>Sana özel küçük bir sürpriz hazırladım...</p>
@@ -91,19 +99,32 @@
     <div class="message-box">
         <p id="mesaj">Butona basınca sana özel bir mesaj gelecek 💌</p>
         <button onclick="mesajGoster()">Mesajı Gör</button>
+
+        <!-- 🎵 Müzik Butonu -->
+        <button id="playMusic">🎵 Müziği Başlat</button>
     </div>
+
+    <!-- Müzik Dosyası -->
+    <audio id="bgMusic">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         function mesajGoster() {
             const mesaj = "Sen hayatımın en güzel parçasısın. Seni çok seviyorum ❤️";
             document.getElementById('mesaj').innerText = mesaj;
         }
+
+        // Müzik Başlatma
+        const playBtn = document.getElementById("playMusic");
+        const bgMusic = document.getElementById("bgMusic");
+
+        playBtn.addEventListener("click", () => {
+            bgMusic.play();
+            playBtn.innerText = "🎶 Müzik Çalıyor";
+            playBtn.disabled = true;
+        });
     </script>
 
-    <!-- 🎵 MÜZİK OTOMATİK BAŞLATILIR -->
-    <audio id="bgMusic" autoplay loop>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
-
 </body>
-</ht
+</html>
