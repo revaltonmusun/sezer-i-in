@@ -1,14 +1,7 @@
-<button id="playBtn">Şarkıyı Başlat 🎵</button>
+const playBtn = document.getElementById("playMusic");
+const bgMusic = document.getElementById("bgMusic");
 
-<audio id="bgMusic">
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-document.getElementById("playBtn").addEventListener("click", function() {
-    const music = document.getElementById("bgMusic");
-    music.volume = 0.7;
-    music.play();
-    this.innerText = "Şarkı Çalıyor 🎶";
+playBtn.addEventListener("click", () => {
+    bgMusic.play();
+    playBtn.innerText = "🎶 Müzik Çalıyor";
 });
-</script>
