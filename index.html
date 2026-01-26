@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sürpriz Başlangıç</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffccd5;
+            font-family: 'Poppins', sans-serif;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        h1 {
+            color: #d0004b;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            background: #ff4d79;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #e63b6b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Aşkım, sürprize başlamaya hazır mısın? ❤️</h1>
+
+    <button id="startMusic">Başlamak için Tıkla 🎵</button>
+
+    <!-- Müzik dosyası -->
+    <audio id="bgMusic">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const btn = document.getElementById("startMusic");
+        const music = document.getElementById("bgMusic");
+
+        btn.addEventListener("click", () => {
+            music.play();
+
+            // 2. Sayfaya yönlendirme
+            window.location.href = "home.html";
+        });
+    </script>
+</body>
+</html>
