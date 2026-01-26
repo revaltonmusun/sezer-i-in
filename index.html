@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sürpriz Başlangıç</title>
 
     <style>
@@ -10,44 +10,94 @@
             margin: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #ffccd5;
+            background: #000;
             font-family: 'Poppins', sans-serif;
-            flex-direction: column;
+            overflow: hidden;
             text-align: center;
         }
 
+        /* Neon başlık */
         h1 {
-            color: #d0004b;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 2.8rem;
+            color: #ff4dff;
+            text-shadow: 0 0 10px #ff4dff,
+                         0 0 20px #ff4dff,
+                         0 0 40px #ff1aff;
+            animation: glow 2s infinite alternate;
+            margin-bottom: 40px;
         }
 
-        button {
-            padding: 15px 35px;
-            font-size: 1.3rem;
-            background: #ff4d79;
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #ff4dff; }
+            100% { text-shadow: 0 0 25px #ff4dff, 0 0 50px #ff1aff; }
+        }
+
+        /* Neon kalp */
+        .heart {
+            width: 140px;
+            height: 140px;
+            background: #ff1aff;
+            transform: rotate(-45deg);
+            position: relative;
+            box-shadow: 0 0 20px #ff1aff, 0 0 40px #ff1aff;
+            animation: beat 1.2s infinite;
+            margin-bottom: 40px;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            width: 140px;
+            height: 140px;
+            background: #ff1aff;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before { top: -70px; left: 0; }
+        .heart::after { left: 70px; top: 0; }
+
+        @keyframes beat {
+            0% { transform: scale(1) rotate(-45deg); }
+            50% { transform: scale(1.15) rotate(-45deg); }
+            100% { transform: scale(1) rotate(-45deg); }
+        }
+
+        /* Neon buton */
+        #startMusic {
+            padding: 15px 40px;
+            background: #ff1aff;
             color: white;
+            font-size: 1.3rem;
             border: none;
-            border-radius: 15px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: 0.3s;
+            box-shadow: 0 0 15px #ff1aff,
+                        0 0 30px #ff1aff,
+                        0 0 60px #ff1aff;
+            transition: 0.2s;
         }
 
-        button:hover {
-            background: #e63b6b;
+        #startMusic:hover {
+            transform: scale(1.07);
+            box-shadow: 0 0 25px #ff1aff,
+                        0 0 50px #ff1aff,
+                        0 0 100px #ff1aff;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Aşkım, sürprize başlamaya hazır mısın? ❤️</h1>
+    <h1>Sürprize Başlamaya Hazır Mısın? 💗</h1>
+
+    <div class="heart"></div>
 
     <button id="startMusic">Başlamak için Tıkla 🎵</button>
 
-    <!-- Müzik dosyası -->
     <audio id="bgMusic">
         <source src="music.mp3" type="audio/mpeg">
     </audio>
@@ -58,10 +108,9 @@
 
         btn.addEventListener("click", () => {
             music.play();
-
-            // 2. Sayfaya yönlendirme
             window.location.href = "home.html";
         });
     </script>
+
 </body>
 </html>
