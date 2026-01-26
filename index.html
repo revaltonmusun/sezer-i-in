@@ -1,39 +1,111 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sevgililer Günü</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sevgililer Günü Sürprizi</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #ffe6ec;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        header {
+            margin-top: 60px;
+        }
+        h1 {
+            color: #d6336c;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+        .heart {
+            width: 150px;
+            height: 150px;
+            background: #ff4d6d;
+            position: relative;
+            transform: rotate(-45deg);
+            margin-top: 40px;
+            animation: beat 1s infinite;
+        }
+        .heart::before,
+        .heart::after {
+            content: "";
+            width: 150px;
+            height: 150px;
+            background: #ff4d6d;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .heart::before { top: -75px; left: 0; }
+        .heart::after { left: 75px; top: 0; }
+
+        @keyframes beat {
+            0% { transform: scale(1) rotate(-45deg); }
+            50% { transform: scale(1.1) rotate(-45deg); }
+            100% { transform: scale(1) rotate(-45deg); }
+        }
+
+        .message-box {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 20px;
+            margin-top: 40px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #d6336c;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #b52a59;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>14 Şubat Kutlu Olsun Aşkım ❤️</h1>
+        <p>Sana özel küçük bir sürpriz hazırladım...</p>
+    </header>
 
-<div class="container fade-in">
-    <h1>❤️ Sevgilim, 14 Şubat Kutlu Olsun ❤️</h1>
-    <p class="message">
-        Seninle geçen her gün, hayatımın en güzel hediyesi.  
-        Bu küçük siteyi sana özel hazırladım…  
-        İyi ki varsın, iyi ki benimlesin. ❤️
-    </p>
+    <div class="heart"></div>
 
-    <img src="images/biz.jpg" class="photo" alt="Fotoğrafımız">
-
-    <button class="btn" onclick="showSurprise()">Sürprizi Gör ✨</button>
-
-    <div id="surprise" class="hidden">
-        <h2>💌 Sana Bir Mesajım Var 💌</h2>
-        <p class="letter">
-            Seni dünyadaki her şeyden çok seviyorum.  
-            Gülüşün, sesin, kokun, varlığın…  
-            Hepsi benim için bir mucize.  
-            Seninle her anım daha güzel, daha anlamlı.  
-            Sonsuza kadar birlikte olmaya… ❤️
-        </p>
+    <div class="message-box">
+        <p id="mesaj">Butona basınca sana özel bir mesaj gelecek 💌</p>
+        <button onclick="mesajGoster()">Mesajı Gör</button>
     </div>
-</div>
 
-<audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e0a7e433f.mp3?filename=romantic-110397.mp3" loop></audio>
+    <script>
+        function mesajGoster() {
+            const mesaj = "Sen hayatımın en güzel parçasısın. Seni çok seviyorum ❤️";
+            document.getElementById('mesaj').innerText = mesaj;
+        }
+    </script>
 
-<script src="script.js"></script>
+    <!-- 🎵 ARKA PLAN MÜZİĞİ -->
+    <iframe width="0" height="0"
+        src="https://www.youtube.com/embed/jhqPom_VnUA?autoplay=1&loop=1&playlist=jhqPom_VnUA"
+        frameborder="0"
+        allow="autoplay">
+    </iframe>
+
 </body>
 </html>
