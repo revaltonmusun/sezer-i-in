@@ -1,88 +1,75 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kalbim Seninle Parlıyor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aylin İçin Hazırlandı</title>
 
     <style>
         body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
             background: #000;
-            overflow: hidden;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             color: white;
-        }
-
-        /* Neon yazı */
-        h1 {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3rem;
-            color: #ff4dff;
-            text-shadow: 0 0 20px #ff4dff, 0 0 40px #ff4dff, 0 0 60px #ff4dff;
-            animation: glow 2s infinite alternate;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #ff4dff; }
-            to { text-shadow: 0 0 30px #ff4dff, 0 0 60px #ff4dff; }
-        }
-
-        /* Fotoğraflar */
-        .photo {
-            position: absolute;
-            width: 180px;
-            height: 180px;
+        img {
+            width: 220px;
+            height: 220px;
             object-fit: cover;
             border-radius: 15px;
-            box-shadow: 0 0 20px #ff4dff, 0 0 40px #ff4dff;
+            box-shadow: 0 0 20px #ff00ff;
+            margin-bottom: 25px;
         }
 
-        #p1 { top: 20px; left: 20px; }
-        #p2 { top: 20px; right: 20px; }
-        #p3 { bottom: 20px; left: 20px; }
-        #p4 { bottom: 20px; right: 20px; }
-
-        /* Hafif neon arka plan efekti */
-        .glow-bg {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255,0,255,0.25), transparent 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            filter: blur(40px);
-            animation: rotate 15s linear infinite;
+        h1 {
+            font-size: 1.8rem;
+            color: #ff00ff;
+            text-shadow: 0 0 20px #ff00ff;
+            margin-bottom: 25px;
         }
 
-        @keyframes rotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+        button {
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 10px;
+            background: #ff00ff;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 20px #ff00ff;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px #ff00ff;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="glow-bg"></div>
+    <!-- FOTOĞRAF (foto.jpg) -->
+    <img src="foto.jpg" alt="Aylin">
 
-    <h1>Kalbim seninle parlıyor.</h1>
+    <!-- YAZI -->
+    <h1>Aylin İçin Hazırlandı</h1>
 
-    <!-- FOTOĞRAFLAR -->
-    <img id="p1" class="photo" src="foto1.jpg" />
-    <img id="p2" class="photo" src="foto2.jpg" />
-    <img id="p3" class="photo" src="foto3.jpg" />
-    <img id="p4" class="photo" src="foto4.jpg" />
+    <!-- BAŞLAT BUTONU -->
+    <button onclick="basla()">Başlat 🎵</button>
 
-    <!-- MÜZİK -->
-    <audio autoplay loop>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
+    <script>
+        function basla() {
+            window.location.href = "home.html";
+        }
+    </script>
 
 </body>
 </html>
