@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(#ff9eb5, #ff577f);
+    color: white;
+    text-align: center;
+}
+
+.container {
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.photo {
+    width: 260px;
+    height: 260px;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    margin: 20px 0;
+}
+
+.btn {
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    background: white;
+    color: #ff3d6b;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #ffe2e9;
+}
+
+.hidden {
+    display: none;
+    margin-top: 20px;
+}
+
+.fade-in {
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.letter {
+    background: rgba(255,255,255,0.2);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
