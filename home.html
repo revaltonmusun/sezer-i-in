@@ -3,112 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senin İçin</title>
+    <title>Hediye</title>
 
     <style>
         body {
-            background: #000;
-            color: white;
             margin: 0;
+            padding: 0;
             height: 100vh;
-            font-family: 'Poppins', sans-serif;
+            background: #000;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            color: white;
             text-align: center;
         }
 
-        img {
-            width: 550px;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 0 30px #ff00ff;
-            margin-bottom: 20px;
+        /* Arka Planda Sürekli Dönen Kraliçe Emojisi */
+        .queen {
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.2;
+            animation: rotate 10s linear infinite;
+            top: 20px;
+            right: 20px;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        #soz {
+        /* Kalpler */
+        .heart {
+            position: absolute;
+            font-size: 25px;
+            color: #ff4da6;
+            animation: fly 6s linear infinite;
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            30% { opacity: 1; }
+            100% {
+                transform: translateY(-10vh) translateX(40px);
+                opacity: 0;
+            }
+        }
+
+        /* Kutu Tasarımı */
+        .box {
+            width: 260px;
+            height: 260px;
+            position: relative;
+            cursor: pointer;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        .lid {
+            width: 260px;
+            height: 60px;
+            background: linear-gradient(to right, #ff00ff, #ff66ff);
+            position: absolute;
+            top: 0;
+            border-radius: 10px 10px 0 0;
+            transform-origin: top;
+            transition: 0.7s;
+        }
+
+        .base {
+            width: 260px;
+            height: 260px;
+            background: #111;
+            border: 3px solid #ff00ff;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+        }
+
+        /* Açıldığında hediyenin görünmesi */
+        .gift {
+            display: none;
+            margin-top: 20px;
             font-size: 1.5rem;
-            margin-bottom: 15px;
             color: #ff66ff;
-            text-shadow: 0 0 15px #ff00ff;
         }
 
-        button {
-            padding: 12px 28px;
-            background: #ff00ff;
-            border: none;
-            color: white;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ff00ff;
-        }
-
-        button:hover {
-            transform: scale(1.1);
-        }
-
-        /* Hediye butonu gizli başlar */
-        #hediyeButon {
-            margin-top: 30px;
-            padding: 12px 28px;
-            background: #ff0077;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ff0077;
-            display: none; /* başlangıçta görünmez */
-        }
-
-        #hediyeButon:hover {
-            transform: scale(1.1);
+        .gift img {
+            width: 280px;
+            margin-top: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px #ff00ff;
         }
     </style>
 </head>
 
 <body>
 
-    <div id="icerik">
-        <img id="foto" src="foto1.jpg">
-        <p id="soz">Seninle her günüm daha güzel.</p>
+    <div class="queen">👑</div>
+
+    <!-- Kutu -->
+    <div class="box" onclick="openBox()">
+        <div class="lid" id="lid"></div>
+        <div class="base"></div>
     </div>
 
-    <button onclick="ileri()">İleri ➜</button>
+    <!-- Hediye Metni + Görsel -->
+    <div class="gift" id="gift">
+        <p>14 Şubat hediyen... ❤️</p>
+        <img src="hediye.jpg">
+    </div>
 
-    <!-- HEDİYE BUTONU (başta gizli) -->
-    <button id="hediyeButon" onclick="window.location.href='hediye.html'">Hediyeyi Gör 🎁</button>
-
-    <audio id="music" autoplay loop>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
-
+    <!-- Kalpler -->
     <script>
-        const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
-        const sozler = [
-            "Seninle her günüm daha güzel.",
-            "Gülüşün dünyamı aydınlatıyor.",
-            "Kalbim hep seninle.",
-            "Sana her baktığımda yeniden aşık oluyorum.",
-            "İyi ki varsın, iyi ki benimsin."
-        ];
+        for (let i = 0; i < 25; i++) {
+            let heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDelay = Math.random() * 5 + "s";
+            heart.style.fontSize = (20 + Math.random() * 25) + "px";
+            document.body.appendChild(heart);
+        }
 
-        let index = 0;
-
-        function ileri() {
-            index++;
-
-            // Fotoğraflar bittiğinde hediye butonu açılır
-            if (index === fotolar.length) {
-                document.getElementById("hediyeButon").style.display = "block";
-                return;
-            }
-
-            document.getElementById("foto").src = fotolar[index];
-            document.getElementById("soz").innerText = sozler[index];
+        function openBox() {
+            document.getElementById("lid").style.transform = "rotateX( -120deg )";
+            setTimeout(() => {
+                document.getElementById("gift").style.display = "block";
+            }, 600);
         }
     </script>
 
