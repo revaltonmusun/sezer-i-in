@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hediyen 🎁</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #000;
+            color: white;
+            text-align: center;
+            padding-top: 60px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff4fa3;
+            text-shadow: 0 0 15px #ff4fa3;
+        }
+
+        p {
+            color: #ddd;
+            font-size: 1.2rem;
+        }
+
+        #giftBox {
+            width: 260px;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+            filter: drop-shadow(0 0 25px #ff4fa3);
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 14px 28px;
+            background: #ff4fa3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px #ff4fa3;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #e23c8d;
+            box-shadow: 0 0 25px #ff4fa3;
+        }
+
+        #hediyeYazi {
+            margin-top: 20px;
+            font-size: 1.3rem;
+            color: #ffbce4;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎁 Sürprizin Burada Aşkım</h1>
+    <p>Aşağıdaki butona bas ve hediyeni gör…</p>
+
+    <button onclick="showGift()">Sürprizi Gör ❤️</button>
+
+    <img id="giftBox" src="hediye.jpg" alt="Hediye Görseli">
+
+    <p id="hediyeYazi">Senin için özenle seçtim… Umarım çok seversin Aylin ❤️</p>
+
+    <script>
+        function showGift() {
+            document.getElementById("giftBox").style.opacity = "1";
+            document.getElementById("hediyeYazi").style.opacity = "1";
+        }
+    </script>
+
+</body>
+</html>
