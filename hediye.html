@@ -72,7 +72,7 @@
         position: absolute;
         height: 100%;
         display: flex;
-        animation: roll 4s cubic-bezier(.1,.95,.1,1) forwards;
+        animation: roll 10s cubic-bezier(.1,.95,.1,1) forwards;
     }
 
     @keyframes roll {
@@ -110,7 +110,7 @@
 
 <body>
 
-<div id="queen">👸🏻</div>
+<div id="queen">🤍</div>
 
 <h1 style="margin-top:40px;">🎁 14 Şubat Hediyen 🎁</h1>
 <p>Kutuyu aç bakalım içinden ne çıkacak 💝</p>
@@ -129,7 +129,7 @@
 </div>
 
 <div id="sonuc">
-    🎉 **Bu hediye senin için seçildi aşkım!** 🎉
+    🎉 <b>Bu hediye senin için seçildi aşkım!</b> 🎉
     <br>
     <img id="sonFoto" src="hediyem.jpg">
 </div>
@@ -153,11 +153,11 @@ function kutuAc() {
     document.getElementById("kutu").style.display = "none";
     document.getElementById("kasa").style.display = "block";
 
-    // Animasyon bitince kazananı göster
+    // Animasyon bitince kazananı göster (10 sn = 10.000 ms)
     setTimeout(() => {
         document.getElementById("kasa").style.display = "none";
         document.getElementById("sonuc").style.display = "block";
-    }, 4000);
+    }, 10000);
 }
 </script>
 
