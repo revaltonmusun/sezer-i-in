@@ -14,7 +14,7 @@
         color: #fff;
     }
 
-    /* Kalp Yağmuru */
+    /* Kalp yağmuru */
     .heart {
         position: fixed;
         top: -10px;
@@ -72,13 +72,15 @@
         position: absolute;
         height: 100%;
         display: flex;
-        animation: roll 10s cubic-bezier(.1,.95,.1,1) forwards;
+        animation: roll 15s cubic-bezier(.1,.95,.1,1) forwards;
     }
 
+    /* 15 saniyelik uzun kayma */
     @keyframes roll {
         0% { transform: translateX(0); }
-        80% { transform: translateX(-900px); }
-        100% { transform: translateX(-1050px); }
+        50% { transform: translateX(-1400px); }
+        80% { transform: translateX(-2200px); }
+        100% { transform: translateX(-2500px); }
     }
 
     .item {
@@ -89,7 +91,7 @@
         border-radius: 10px;
     }
 
-    /* Kazanan */
+    /* Kazanan ekranı */
     #sonuc {
         display: none;
         margin-top: 40px;
@@ -110,21 +112,31 @@
 
 <body>
 
-<div id="queen">🤍</div>
+<div id="queen">👸🏻</div>
 
 <h1 style="margin-top:40px;">🎁 14 Şubat Hediyen 🎁</h1>
 <p>Kutuyu aç bakalım içinden ne çıkacak 💝</p>
 
 <img id="kutu" src="kutu.png" onclick="kutuAc()">
 
-<!-- CS KASA -->
+<!-- CS Kasa Alanı -->
 <div id="kasa">
     <div id="kayan">
+
+        <!-- Uzun item listesi (kasadaki dönen fotoğraflar) -->
         <img class="item" src="hediye1.jpg">
         <img class="item" src="hediye2.jpg">
         <img class="item" src="hediye1.jpg">
         <img class="item" src="hediye2.jpg">
-        <img class="item" src="hediyem.jpg"> <!-- KAZANAN -->
+        <img class="item" src="hediye1.jpg">
+        <img class="item" src="hediye2.jpg">
+
+        <img class="item" src="hediye1.jpg">
+        <img class="item" src="hediye2.jpg">
+
+        <!-- Finalde duracak olan -->
+        <img class="item" src="hediyem.jpg">
+
     </div>
 </div>
 
@@ -153,11 +165,11 @@ function kutuAc() {
     document.getElementById("kutu").style.display = "none";
     document.getElementById("kasa").style.display = "block";
 
-    // Animasyon bitince kazananı göster (10 sn = 10.000 ms)
+    // 15 saniyelik animasyon bittikten sonra
     setTimeout(() => {
         document.getElementById("kasa").style.display = "none";
         document.getElementById("sonuc").style.display = "block";
-    }, 10000);
+    }, 15000);
 }
 </script>
 
