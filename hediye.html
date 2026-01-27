@@ -3,158 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hediyen 🎁</title>
+    <title>Hediye</title>
 
     <style>
         body {
             margin: 0;
+            padding: 0;
+            height: 100vh;
             background: #000;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
-        }
-
-        h1 {
-            margin-top: 40px;
-            font-size: 2.6rem;
-            color: #ff4fa3;
-            text-shadow: 0 0 20px #ff4fa3;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 14px 28px;
-            background: #ff4fa3;
-            border: none;
+            font-family: 'Poppins', sans-serif;
             color: white;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ff4fa3;
+            text-align: center;
         }
 
-        button:hover {
-            transform: scale(1.05);
-        }
-
-        /* Kutu container */
-        .gift-container {
-            position: relative;
-            margin: 40px auto;
-            width: 260px;
-            height: 260px;
-        }
-
-        /* Kutunun alt kısmı */
-        .box {
-            width: 100%;
-            height: 100%;
-            background: #ff4fa3;
-            border-radius: 15px;
-            box-shadow: 0 0 35px #ff4fa3;
+        /* Arka Planda Sürekli Dönen Kraliçe Emojisi */
+        .queen {
             position: absolute;
-            bottom: 0;
+            font-size: 80px;
+            opacity: 0.2;
+            animation: rotate 10s linear infinite;
+            top: 20px;
+            right: 20px;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Kutunun kapağı */
-        .lid {
-            width: 100%;
-            height: 80px;
-            background: #ff77c7;
-            border-radius: 15px;
-            position: absolute;
-            top: 0;
-            box-shadow: 0 0 35px #ff4fa3;
-            transform-origin: top center;
-            transition: transform 1s ease-in-out;
-        }
-
-        /* Hediye fotoğrafı (kutudan çıkacak) */
-        #giftImage {
-            width: 260px;
-            border-radius: 15px;
-            position: absolute;
-            top: 70px;
-            left: 0;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: 1.2s;
-            filter: drop-shadow(0 0 20px #ff4fa3);
-        }
-
-        /* Kaçan kalpler */
+        /* Kalpler */
         .heart {
             position: absolute;
-            font-size: 26px;
-            transition: transform 0.2s;
-            pointer-events: none;
+            font-size: 25px;
+            color: #ff4da6;
+            animation: fly 6s linear infinite;
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            30% { opacity: 1; }
+            100% {
+                transform: translateY(-10vh) translateX(40px);
+                opacity: 0;
+            }
+        }
+
+        /* Kutu Tasarımı */
+        .box {
+            width: 260px;
+            height: 260px;
+            position: relative;
+            cursor: pointer;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        .lid {
+            width: 260px;
+            height: 60px;
+            background: linear-gradient(to right, #ff00ff, #ff66ff);
+            position: absolute;
+            top: 0;
+            border-radius: 10px 10px 0 0;
+            transform-origin: top;
+            transition: 0.7s;
+        }
+
+        .base {
+            width: 260px;
+            height: 260px;
+            background: #111;
+            border: 3px solid #ff00ff;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+        }
+
+        /* Açıldığında hediyenin görünmesi */
+        .gift {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #ff66ff;
+        }
+
+        .gift img {
+            width: 280px;
+            margin-top: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px #ff00ff;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>🎁 Sürprizin Burada Aşkım</h1>
-    <button onclick="openGift()">Hediyeyi Aç ❤️</button>
+    <div class="queen">👑</div>
 
-    <div class="gift-container">
+    <!-- Kutu -->
+    <div class="box" onclick="openBox()">
         <div class="lid" id="lid"></div>
-        <div class="box"></div>
-
-        <!-- Kutu içinden çıkan hediye -->
-        <img id="giftImage" src="hediye.jpg" alt="Hediye">
+        <div class="base"></div>
     </div>
 
+    <!-- Hediye Metni + Görsel -->
+    <div class="gift" id="gift">
+        <p>14 Şubat hediyen... ❤️</p>
+        <img src="hediye.jpg">
+    </div>
+
+    <!-- Kalpler -->
     <script>
-        function openGift() {
-            // Kutu kapağı açılır
-            document.getElementById("lid").style.transform = "rotateX( -120deg )";
-
-            // Hediye yukarı çıkar
-            const img = document.getElementById("giftImage");
-            setTimeout(() => {
-                img.style.opacity = "1";
-                img.style.transform = "translateY(-40px)";
-            }, 600);
-
-            // Kalpler sürekli çıkmaya başlar
-            setInterval(spawnHeart, 500);
+        for (let i = 0; i < 25; i++) {
+            let heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDelay = Math.random() * 5 + "s";
+            heart.style.fontSize = (20 + Math.random() * 25) + "px";
+            document.body.appendChild(heart);
         }
 
-        function spawnHeart() {
-            const heart = document.createElement("div");
-            heart.classList.add("heart");
-            heart.innerHTML = "❤️";
-
-            // Rastgele başlangıç pozisyonu
-            heart.style.left = Math.random() * (window.innerWidth - 50) + "px";
-            heart.style.top = Math.random() * (window.innerHeight - 50) + "px";
-
-            document.body.appendChild(heart);
-
-            // Kalp mouse yaklaşınca kaçsın
-            document.addEventListener("mousemove", (e) => {
-                const dx = heart.offsetLeft - e.clientX;
-                const dy = heart.offsetTop - e.clientY;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < 120) {
-                    const angle = Math.atan2(dy, dx);
-                    const moveX = Math.cos(angle) * 80;
-                    const moveY = Math.sin(angle) * 80;
-
-                    let newX = heart.offsetLeft + moveX;
-                    let newY = heart.offsetTop + moveY;
-
-                    // Ekran dışına kaçmasın
-                    newX = Math.max(20, Math.min(window.innerWidth - 40, newX));
-                    newY = Math.max(20, Math.min(window.innerHeight - 40, newY));
-
-                    heart.style.left = newX + "px";
-                    heart.style.top = newY + "px";
-                }
-            });
+        function openBox() {
+            document.getElementById("lid").style.transform = "rotateX( -120deg )";
+            setTimeout(() => {
+                document.getElementById("gift").style.display = "block";
+            }, 600);
         }
     </script>
 
