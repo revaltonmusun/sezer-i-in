@@ -8,82 +8,87 @@
     <style>
         body {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
             background: #000;
             color: white;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
             overflow: hidden;
         }
 
         h1 {
-            margin-top: 50px;
+            margin-top: 40px;
             font-size: 2.6rem;
             color: #ff4fa3;
             text-shadow: 0 0 20px #ff4fa3;
         }
 
-        p {
-            color: #ddd;
-            font-size: 1.2rem;
-        }
-
-        /* Hediye kutusu animasyonu */
-        #giftBox {
-            width: 260px;
-            margin-top: 30px;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: 1.3s ease-in-out;
-            filter: drop-shadow(0 0 25px #ff4fa3);
-        }
-
-        /* Açılma sonrası yazı */
-        #hediyeYazi {
-            margin-top: 20px;
-            font-size: 1.4rem;
-            color: #ffbce4;
-            opacity: 0;
-            transition: 1.5s;
-            text-shadow: 0 0 15px #ff4fa3;
-        }
-
-        /* Buton */
         button {
-            margin-top: 25px;
+            margin-top: 20px;
             padding: 14px 28px;
             background: #ff4fa3;
-            color: white;
             border: none;
-            border-radius: 10px;
+            color: white;
             font-size: 1.1rem;
+            border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 0 20px #ff4fa3;
-            transition: 0.25s;
         }
 
         button:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 30px #ff4fa3;
         }
 
-        /* Uçan kalpler */
+        /* Kutu container */
+        .gift-container {
+            position: relative;
+            margin: 40px auto;
+            width: 260px;
+            height: 260px;
+        }
+
+        /* Kutunun alt kısmı */
+        .box {
+            width: 100%;
+            height: 100%;
+            background: #ff4fa3;
+            border-radius: 15px;
+            box-shadow: 0 0 35px #ff4fa3;
+            position: absolute;
+            bottom: 0;
+        }
+
+        /* Kutunun kapağı */
+        .lid {
+            width: 100%;
+            height: 80px;
+            background: #ff77c7;
+            border-radius: 15px;
+            position: absolute;
+            top: 0;
+            box-shadow: 0 0 35px #ff4fa3;
+            transform-origin: top center;
+            transition: transform 1s ease-in-out;
+        }
+
+        /* Hediye fotoğrafı (kutudan çıkacak) */
+        #giftImage {
+            width: 260px;
+            border-radius: 15px;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 1.2s;
+            filter: drop-shadow(0 0 20px #ff4fa3);
+        }
+
+        /* Kaçan kalpler */
         .heart {
-            position: fixed;
-            bottom: -10px;
-            font-size: 25px;
-            animation: fly 4s linear forwards;
+            position: absolute;
+            font-size: 26px;
+            transition: transform 0.2s;
             pointer-events: none;
-        }
-
-        @keyframes fly {
-            from {
-                transform: translateY(0) translateX(0) rotate(0deg);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-120vh) translateX(40px) rotate(360deg);
-                opacity: 0;
-            }
         }
     </style>
 </head>
@@ -91,43 +96,65 @@
 <body>
 
     <h1>🎁 Sürprizin Burada Aşkım</h1>
-    <p>Butona bas ve hediyenin açılışını izle…</p>
+    <button onclick="openGift()">Hediyeyi Aç ❤️</button>
 
-    <button onclick="showGift()">Hediyeyi Aç ❤️</button>
+    <div class="gift-container">
+        <div class="lid" id="lid"></div>
+        <div class="box"></div>
 
-    <!-- Hediyenin fotoğrafı -->
-    <img id="giftBox" src="hediye.jpg" alt="Hediye">
-
-    <p id="hediyeYazi">İyi ki varsın… Bu hediyeyi sana sevgimle aldım Aylin ❤️</p>
+        <!-- Kutu içinden çıkan hediye -->
+        <img id="giftImage" src="hediye.jpg" alt="Hediye">
+    </div>
 
     <script>
-        function showGift() {
-            // Hediye görünür hale gelir
-            const gift = document.getElementById("giftBox");
-            const yazi = document.getElementById("hediyeYazi");
+        function openGift() {
+            // Kutu kapağı açılır
+            document.getElementById("lid").style.transform = "rotateX( -120deg )";
 
-            gift.style.opacity = "1";
-            gift.style.transform = "scale(1)";
-            yazi.style.opacity = "1";
+            // Hediye yukarı çıkar
+            const img = document.getElementById("giftImage");
+            setTimeout(() => {
+                img.style.opacity = "1";
+                img.style.transform = "translateY(-40px)";
+            }, 600);
 
-            // Her 300ms'de 1 uçan kalp üret
-            setInterval(createHeart, 300);
+            // Kalpler sürekli çıkmaya başlar
+            setInterval(spawnHeart, 500);
         }
 
-        function createHeart() {
+        function spawnHeart() {
             const heart = document.createElement("div");
             heart.classList.add("heart");
             heart.innerHTML = "❤️";
 
-            // Sayfanın rastgele bir genişliğinde çıksın
-            heart.style.left = Math.random() * window.innerWidth + "px";
+            // Rastgele başlangıç pozisyonu
+            heart.style.left = Math.random() * (window.innerWidth - 50) + "px";
+            heart.style.top = Math.random() * (window.innerHeight - 50) + "px";
 
             document.body.appendChild(heart);
 
-            // Animasyon bitince DOM'dan sil
-            setTimeout(() => {
-                heart.remove();
-            }, 4000);
+            // Kalp mouse yaklaşınca kaçsın
+            document.addEventListener("mousemove", (e) => {
+                const dx = heart.offsetLeft - e.clientX;
+                const dy = heart.offsetTop - e.clientY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 120) {
+                    const angle = Math.atan2(dy, dx);
+                    const moveX = Math.cos(angle) * 80;
+                    const moveY = Math.sin(angle) * 80;
+
+                    let newX = heart.offsetLeft + moveX;
+                    let newY = heart.offsetTop + moveY;
+
+                    // Ekran dışına kaçmasın
+                    newX = Math.max(20, Math.min(window.innerWidth - 40, newX));
+                    newY = Math.max(20, Math.min(window.innerHeight - 40, newY));
+
+                    heart.style.left = newX + "px";
+                    heart.style.top = newY + "px";
+                }
+            });
         }
     </script>
 
