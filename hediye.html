@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hediyen 🎁</title>
 
     <style>
@@ -12,13 +12,14 @@
             background: #000;
             color: white;
             text-align: center;
-            padding-top: 60px;
+            overflow: hidden;
         }
 
         h1 {
-            font-size: 2.5rem;
+            margin-top: 50px;
+            font-size: 2.6rem;
             color: #ff4fa3;
-            text-shadow: 0 0 15px #ff4fa3;
+            text-shadow: 0 0 20px #ff4fa3;
         }
 
         p {
@@ -26,38 +27,63 @@
             font-size: 1.2rem;
         }
 
+        /* Hediye kutusu animasyonu */
         #giftBox {
             width: 260px;
-            margin-top: 20px;
+            margin-top: 30px;
             opacity: 0;
-            transition: opacity 1.2s ease-in-out;
+            transform: scale(0.5);
+            transition: 1.3s ease-in-out;
             filter: drop-shadow(0 0 25px #ff4fa3);
         }
 
+        /* Açılma sonrası yazı */
+        #hediyeYazi {
+            margin-top: 20px;
+            font-size: 1.4rem;
+            color: #ffbce4;
+            opacity: 0;
+            transition: 1.5s;
+            text-shadow: 0 0 15px #ff4fa3;
+        }
+
+        /* Buton */
         button {
-            margin-top: 30px;
+            margin-top: 25px;
             padding: 14px 28px;
             background: #ff4fa3;
             color: white;
             border: none;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            box-shadow: 0 0 15px #ff4fa3;
-            transition: 0.3s;
+            box-shadow: 0 0 20px #ff4fa3;
+            transition: 0.25s;
         }
 
         button:hover {
-            background: #e23c8d;
-            box-shadow: 0 0 25px #ff4fa3;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #ff4fa3;
         }
 
-        #hediyeYazi {
-            margin-top: 20px;
-            font-size: 1.3rem;
-            color: #ffbce4;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
+        /* Uçan kalpler */
+        .heart {
+            position: fixed;
+            bottom: -10px;
+            font-size: 25px;
+            animation: fly 4s linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes fly {
+            from {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-120vh) translateX(40px) rotate(360deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -65,18 +91,43 @@
 <body>
 
     <h1>🎁 Sürprizin Burada Aşkım</h1>
-    <p>Aşağıdaki butona bas ve hediyeni gör…</p>
+    <p>Butona bas ve hediyenin açılışını izle…</p>
 
-    <button onclick="showGift()">Sürprizi Gör ❤️</button>
+    <button onclick="showGift()">Hediyeyi Aç ❤️</button>
 
-    <img id="giftBox" src="hediye.jpg" alt="Hediye Görseli">
+    <!-- Hediyenin fotoğrafı -->
+    <img id="giftBox" src="hediye.jpg" alt="Hediye">
 
-    <p id="hediyeYazi">Senin için özenle seçtim… Umarım çok seversin Aylin ❤️</p>
+    <p id="hediyeYazi">İyi ki varsın… Bu hediyeyi sana sevgimle aldım Aylin ❤️</p>
 
     <script>
         function showGift() {
-            document.getElementById("giftBox").style.opacity = "1";
-            document.getElementById("hediyeYazi").style.opacity = "1";
+            // Hediye görünür hale gelir
+            const gift = document.getElementById("giftBox");
+            const yazi = document.getElementById("hediyeYazi");
+
+            gift.style.opacity = "1";
+            gift.style.transform = "scale(1)";
+            yazi.style.opacity = "1";
+
+            // Her 300ms'de 1 uçan kalp üret
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤️";
+
+            // Sayfanın rastgele bir genişliğinde çıksın
+            heart.style.left = Math.random() * window.innerWidth + "px";
+
+            document.body.appendChild(heart);
+
+            // Animasyon bitince DOM'dan sil
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
         }
     </script>
 
