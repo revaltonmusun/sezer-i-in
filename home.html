@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vecz1fv72x");
-</script>
-
-    <!-- senin diğer head içeriklerin -->
-</head>
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "vecz1fv72x");
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,6 +43,14 @@
             text-shadow: 0 0 15px #ff00ff;
         }
 
+        /* Konum Yazısı Stili */
+        #konum-bilgi {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
         button {
             padding: 12px 28px;
             background: #ff00ff;
@@ -61,7 +66,6 @@
             transform: scale(1.1);
         }
 
-        /* Hediye butonu gizli başlar */
         #hediyeButon {
             margin-top: 30px;
             padding: 12px 28px;
@@ -72,7 +76,7 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 0 20px #ff0077;
-            display: none; /* başlangıçta görünmez */
+            display: none;
         }
 
         #hediyeButon:hover {
@@ -86,11 +90,11 @@
     <div id="icerik">
         <img id="foto" src="foto1.jpg">
         <p id="soz">Seninle her günüm daha güzel.</p>
+        <p id="konum-bilgi">Konumun aranıyor... 📍</p> 
     </div>
 
     <button onclick="ileri()">İleri ➜</button>
 
-    <!-- HEDİYE BUTONU (başta gizli) -->
     <button id="hediyeButon" onclick="window.location.href='hediye.html'">Hediyeyi Gör 🎁</button>
 
     <audio id="music" autoplay loop>
@@ -98,30 +102,33 @@
     </audio>
 
     <script>
+        // --- KONUM BULMA KODU BAŞLANGIÇ ---
+        window.onload = function() {
+            const konumAlani = document.getElementById("konum-bilgi");
+
+            // Önce IP ile şehir tahmini yapalım (Hızlı sonuç için)
+            fetch('https://ipapi.co/json/')
+                .then(res => res.json())
+                .then(data => {
+                    konumAlani.innerHTML = `${data.city}, ${data.country_name} civarından bağlanıyorsun...`;
+                    
+                    // Sonra daha hassas konum için izin isteyelim
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            const lat = position.coords.latitude.toFixed(4);
+                            const lng = position.coords.longitude.toFixed(4);
+                            konumAlani.innerHTML = `Tam konumun: ${data.city} (${lat}, ${lng}) 📍`;
+                        });
+                    }
+                })
+                .catch(() => {
+                    konumAlani.innerHTML = "Konumun gizli sanırım... 🤫";
+                });
+        };
+        // --- KONUM BULMA KODU BİTİŞ ---
+
         const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
         const sozler = [
             "Seninle her günüm daha güzel.",
             "Gülüşün dünyamı aydınlatıyor.",
             "Kalbim hep seninle.",
-            "Sana her baktığımda yeniden aşık oluyorum.",
-            "İyi ki varsın, iyi ki benimsin."
-        ];
-
-        let index = 0;
-
-        function ileri() {
-            index++;
-
-            // Fotoğraflar bittiğinde hediye butonu açılır
-            if (index === fotolar.length) {
-                document.getElementById("hediyeButon").style.display = "block";
-                return;
-            }
-
-            document.getElementById("foto").src = fotolar[index];
-            document.getElementById("soz").innerText = sozler[index];
-        }
-    </script>
-
-</body>
-</html>
